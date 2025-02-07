@@ -1,0 +1,20 @@
+Завдання 2
+import random
+
+class Cipher:
+    def __init__(self, numbers):
+        self._numbers = [self._encrypt(num) for num in numbers]  # Шифруємо числа
+
+    def _encrypt(self, num):
+        return num * random.randint(1, 10)  # Випадкове множення
+
+    def decrypt(self):
+        return [num // 10 for num in self._numbers]  # Повернення "наближеного" результату
+
+    def __str__(self):
+        return f"Зашифровані дані: {self._numbers}"
+
+
+cipher = Cipher([5, 10, 15])
+print(cipher)  # Виведе зашифровані дані
+print("Розшифровані дані:", cipher.decrypt())  # Виведе "розшифровані" дані
