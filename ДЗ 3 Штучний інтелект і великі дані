@@ -1,0 +1,23 @@
+
+class Human:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def introduce(self):
+        return f"Привіт, мене звати {self.name}, мені {self.age} років."
+
+class Pet:
+    def __init__(self, name, species):
+        self.name = name
+        self.species = species
+
+    def interact_with_human(self, human):
+        return f"{self.name} ({self.species}) грається з {human.name}."
+
+
+human = Human("Олександр", 30)
+pet = Pet("Барсик", "кіт")
+
+print(human.introduce())
+print(pet.interact_with_human(human))
