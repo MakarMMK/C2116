@@ -1,0 +1,25 @@
+import tkinter
+import inspect
+
+print(type(tkinter))
+
+print(dir(tkinter))
+
+attribute = 'Tk'
+print(f'{attribute}', hasattr(tkinter, attribute))
+
+TkClass = getattr(tkinter, 'Tk', None)
+print(f'{attribute}', TkClass)
+
+print(callable(TkClass))
+
+print(issubclass(TkClass, object))
+
+root = TkClass()
+print(isinstance(root, TkClass))
+
+print(inspect.ismodule(tkinter))
+print(inspect.isclass(TkClass))
+print(inspect.isfunction(TkClass))
+
+print(inspect.getmodule(TkClass))
