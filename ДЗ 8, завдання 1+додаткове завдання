@@ -1,0 +1,30 @@
+import logging
+import time
+from functools import wraps
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def log_exceptions(func):
+    """Декоратор для логування помилок у функціях."""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logging.error(f"Помилка у функції {func.__name__}: {e}")
+            return None
+    return wrapper
+
+@log_exceptions
+def simulate():
+    """Функція, що імітує процес симуляції."""
+    logging.info("Симуляція почалась")
+    for i in range(1, 6):
+        logging.info(f"Крок {i}")
+        time.sleep(0.5)
+        if i == 3:
+            raise ValueError("Виникла помилка на кроці 3!")
+    logging.info("Симуляція завершена")
+
+if __name__ == "__main__":
+    simulate()
