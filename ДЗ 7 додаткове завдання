@@ -1,0 +1,31 @@
+class StudentSimulator:
+    def __init__(self, name):
+        self.name = name
+        self.days = [
+            "День 1: Понеділок — день навчання: лекції з історії.",
+            "День 2: Вівторок — день навчання: заняття з математики.",
+            "День 3: Середа — день навчання: лабораторні роботи з фізики.",
+            "День 4: Четвер — день навчання: семінар з літератури.",
+            "День 5: П'ятниця — день навчання: контрольна з хімії.",
+            "День 6: Субота — відвідування на виставку сучасного мистецтва.",
+            "День 7: Неділя — поїздка на природу з друзями."
+        ]
+        self.current_day = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current_day < len(self.days):
+            day = self.days[self.current_day]
+            self.current_day += 1
+            return day
+        else:
+            raise StopIteration
+
+
+student = StudentSimulator("Іван")
+
+for day in student:
+    print(day)
+
