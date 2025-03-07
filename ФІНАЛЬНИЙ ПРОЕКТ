@@ -1,0 +1,131 @@
+import tkinter as tk
+
+
+class ClickerGame:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Клікер")
+        self.root.configure(bg="#add8e6")
+
+        self.score = 0
+        self.per_click = 1
+        self.auto_income = 0
+
+        self.upgrade_costs = {
+            "upgrade1": 10,
+            "upgrade3": 100,
+            "upgrade5": 500,
+            "upgrade6": 2500,
+            "upgrade7": 10000,
+        }
+
+        self.upgrade2_cost = 50
+        self.upgrade4_cost = 200
+
+        self.auto_clicks = 0
+
+        # Основний фрейм
+        self.main_frame = tk.Frame(root, bg="#add8e6")
+        self.main_frame.pack(expand=True, fill="both")
+
+        # Фрейм для покращень (зліва)
+        self.left_frame = tk.Frame(self.main_frame, bg="#87CEEB", padx=10, pady=10)
+        self.left_frame.pack(side="left", fill="y")
+
+        # Фрейм для центру (рахунок і кнопка)
+        self.center_frame = tk.Frame(self.main_frame, bg="#add8e6", padx=20, pady=20)
+        self.center_frame.pack(side="left", expand=True)
+
+        # Фрейм для автоклікерів (справа)
+        self.right_frame = tk.Frame(self.main_frame, bg="#87CEEB", padx=10, pady=10)
+        self.right_frame.pack(side="left", fill="y")
+
+        # Лічильник очок
+        self.score_label = tk.Label(self.center_frame, text=f"Очки: {self.score}", font=("Arial", 20, "bold"),
+                                    bg="#add8e6")
+        self.score_label.pack()
+
+        # Кнопка кліка в центрі
+        self.click_button = tk.Button(self.center_frame, text="Клік!", font=("Arial", 16), command=self.click,
+                                      bg="#90ee90", width=10, height=2)
+        self.click_button.pack()
+
+        # Лічильник кліків за раз
+        self.per_click_label = tk.Label(self.center_frame, text=f"+{self.per_click} за клік",
+                                        font=("Arial", 16, "bold"), bg="#add8e6")
+        self.per_click_label.pack()
+
+        # Кнопки покращень (ліворуч)
+        self.create_upgrade_buttons()
+
+        # Кнопки автоклікерів (праворуч)
+        self.upgrade2_button = tk.Button(self.right_frame, text=f"Автоклік +1 за секунду ({self.upgrade2_cost} очок)",
+                                         command=self.buy_upgrade2, bg="#ffcccb", width=25)
+        self.upgrade2_button.pack(pady=5)
+
+        self.upgrade4_button = tk.Button(self.right_frame,
+                                         text=f"Швидкість автокліка +1 секунда ({self.upgrade4_cost} очок)",
+                                         command=self.buy_upgrade4, bg="#ffcccb", width=25)
+        self.upgrade4_button.pack(pady=5)
+
+        self.update_auto_income()
+
+    def create_upgrade_buttons(self):
+        self.upgrade_buttons = [
+            ("Покращення +1", "upgrade1", 1),
+            ("Покращення +5", "upgrade3", 5),
+            ("Покращення +10", "upgrade5", 10),
+            ("Покращення +50", "upgrade6", 50),
+            ("Покращення +100", "upgrade7", 100)
+        ]
+        self.buttons = []
+
+        for text, key, amount in self.upgrade_buttons:
+            btn = tk.Button(self.left_frame, text=f"{text} за клік ({self.upgrade_costs[key]} очок)",
+                            command=lambda k=key, a=amount: self.buy_upgrade(k, a), bg="#ffcccb", width=25)
+            btn.pack(pady=5)
+            self.buttons.append((btn, key))
+
+    def click(self):
+        self.score += self.per_click
+        self.update_score()
+
+    def buy_upgrade(self, key, amount):
+        cost = self.upgrade_costs[key]
+        if self.score >= cost:
+            self.score -= cost
+            self.per_click += amount
+            for k in self.upgrade_costs:
+                self.upgrade_costs[k] += cost
+            for btn, k in self.buttons:
+                btn.config(text=f"{btn.cget('text').split('(')[0]}({self.upgrade_costs[k]} очок)")
+            self.update_score()
+
+    def buy_upgrade2(self):
+        if self.score >= self.upgrade2_cost and self.auto_clicks == 0:
+            self.score -= self.upgrade2_cost
+            self.auto_income += 1
+            self.auto_clicks += 1
+            self.upgrade2_button.config(text="Автоклік (OFFSALE)", state=tk.DISABLED)
+            self.update_score()
+
+    def buy_upgrade4(self):
+        if self.score >= self.upgrade4_cost:
+            self.score -= self.upgrade4_cost
+            self.upgrade4_cost *= 2
+            self.upgrade4_button.config(text=f"Швидкість автокліка +1 секунда ({self.upgrade4_cost} очок)")
+            self.update_score()
+
+    def update_score(self):
+        self.score_label.config(text=f"Очки: {self.score}")
+        self.per_click_label.config(text=f"+{self.per_click} за клік")
+
+    def update_auto_income(self):
+        self.score += self.auto_income
+        self.update_score()
+        self.root.after(1000, self.update_auto_income)
+
+
+root = tk.Tk()
+game = ClickerGame(root)
+root.mainloop()
