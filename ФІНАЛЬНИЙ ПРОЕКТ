@@ -24,41 +24,38 @@ class ClickerGame:
 
         self.auto_clicks = 0
 
-        # Основний фрейм
+
         self.main_frame = tk.Frame(root, bg="#add8e6")
         self.main_frame.pack(expand=True, fill="both")
 
-        # Фрейм для покращень (зліва)
+
         self.left_frame = tk.Frame(self.main_frame, bg="#87CEEB", padx=10, pady=10)
         self.left_frame.pack(side="left", fill="y")
 
-        # Фрейм для центру (рахунок і кнопка)
+
         self.center_frame = tk.Frame(self.main_frame, bg="#add8e6", padx=20, pady=20)
         self.center_frame.pack(side="left", expand=True)
 
-        # Фрейм для автоклікерів (справа)
         self.right_frame = tk.Frame(self.main_frame, bg="#87CEEB", padx=10, pady=10)
         self.right_frame.pack(side="left", fill="y")
 
-        # Лічильник очок
+
         self.score_label = tk.Label(self.center_frame, text=f"Очки: {self.score}", font=("Arial", 20, "bold"),
                                     bg="#add8e6")
         self.score_label.pack()
 
-        # Кнопка кліка в центрі
         self.click_button = tk.Button(self.center_frame, text="Клік!", font=("Arial", 16), command=self.click,
                                       bg="#90ee90", width=10, height=2)
         self.click_button.pack()
 
-        # Лічильник кліків за раз
+
         self.per_click_label = tk.Label(self.center_frame, text=f"+{self.per_click} за клік",
                                         font=("Arial", 16, "bold"), bg="#add8e6")
         self.per_click_label.pack()
 
-        # Кнопки покращень (ліворуч)
         self.create_upgrade_buttons()
 
-        # Кнопки автоклікерів (праворуч)
+
         self.upgrade2_button = tk.Button(self.right_frame, text=f"Автоклік +1 за секунду ({self.upgrade2_cost} очок)",
                                          command=self.buy_upgrade2, bg="#ffcccb", width=25)
         self.upgrade2_button.pack(pady=5)
